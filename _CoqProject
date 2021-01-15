@@ -1,4 +1,5 @@
 -R theories/ DefUIP_II
 -arg -noinit
 -arg -w -arg all
+theories/Prelude.v
 theories/Scratch.v
