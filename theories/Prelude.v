@@ -108,6 +108,7 @@ Definition W_rect@{i j} (A : Type@{i}) (B : A → Type@{i}) (P : W A B → Type@
 Inductive Id@{i} (A : Type@{i}) (x : A) : A → SProp := refl : Id A x x.
 Arguments Id {A} x y.
 Arguments refl {A} x, {A x}.
+Notation "x = y" := (Id x y) : type_scope.
 
 (** A few lemmas about Id *)
 Definition cong@{i j} {A : Type@{i}} {B : Type@{j}} (f : A → B) {x y : A}
@@ -143,4 +144,27 @@ Definition Some'@{i} {A : Type@{i}} (a : A) : option@{i} A := Some a.
 Definition U@{i} := Type@{i}.
 
 (** * Notation for tests *)
-Notation convertible x y := (refl : Id x y).
+Notation convertible x y := (refl : x = y).
+
+Inductive True : SProp := I.
+Inductive False : SProp := .
+Notation "⊤" := True : type_scope.
+Notation "⊥" := False : type_scope.
+
+Record dep_and (P : SProp) (Q : P → SProp) : SProp := conj { proj1 : P; proj2 : Q proj1 }.
+Arguments conj {P Q} & _ _.
+Arguments proj1 {P Q} _.
+Arguments proj2 {P Q} _.
+Notation "A ∧ B" := (dep_and A (λ _ ↦ B))
+  (at level 80, right associativity) : type_scope.
+
+Inductive Box (P : SProp) : Set := box (p : P).
+Arguments box {P} p.
+Definition unbox {P : SProp} (b : Box P) : P := match b with box p => p end.
+
+(* different eta rule from (prod A (Box ∘ P)) *)
+Record sub@{i} (A : Type@{i}) (P : A → SProp) : Type@{i} :=
+  sub_in { wit : A; prf : P wit }.
+Arguments sub_in {A P} & _ _.
+Arguments wit {A P} _.
+Arguments prf {A P} _.
