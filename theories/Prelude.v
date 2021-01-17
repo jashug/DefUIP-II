@@ -104,21 +104,6 @@ Definition W_rect@{i j} (A : Type@{i}) (B : A → Type@{i}) (P : W A B → Type@
   (IS : ∀ a f, (∀ b, P (f b)) → P (sup a f)) : ∀ w, P w :=
   fix rect w := match w with sup a f => IS a f (rect ∘ f) end.
 
-(** * Identity types *)
-Inductive Id@{i} (A : Type@{i}) (x : A) : A → SProp := refl : Id A x x.
-Arguments Id {A} x y.
-Arguments refl {A} x, {A x}.
-Notation "x = y" := (Id x y) : type_scope.
-
-(** A few lemmas about Id *)
-Definition cong@{i j} {A : Type@{i}} {B : Type@{j}} (f : A → B) {x y : A}
-  (e : Id x y) : Id (f x) (f y) :=
-  match e with refl => refl end.
-(* Transitivity from the middle. *)
-Definition v_trans@{i} {A : Type@{i}} {x y z : A}
-  (e1 : Id y x) (e2 : Id y z) : Id x z :=
-  match e1 with refl => e2 end.
-
 (** * Sum types *)
 (** We define sum types from bool and Σ *)
 
@@ -143,8 +128,7 @@ Definition Some'@{i} {A : Type@{i}} (a : A) : option@{i} A := Some a.
 (** * Universe *)
 Definition U@{i} := Type@{i}.
 
-(** * Notation for tests *)
-Notation convertible x y := (refl : x = y).
+(** SProp *)
 
 Inductive True : SProp := I.
 Inductive False : SProp := .
@@ -168,3 +152,26 @@ Record sub@{i} (A : Type@{i}) (P : A → SProp) : Type@{i} :=
 Arguments sub_in {A P} & _ _.
 Arguments wit {A P} _.
 Arguments prf {A P} _.
+Notation "{ x | P }" := (sub _ (fun x => P)) : type_scope.
+Notation "{ x : A | P }" := (sub A (fun x => P)) : type_scope.
+Notation "{ ' pat | P }" := (sub _ (fun pat => P)) : type_scope.
+Notation "{ ' pat : A | P }" := (sub A (fun pat => P)) : type_scope.
+
+(** * Identity types *)
+Inductive Id@{i} (A : Type@{i}) (x : A) : A → SProp := refl : Id A x x.
+Arguments Id {A} x y.
+Arguments refl {A} x, {A x}.
+Notation "x = y :> A" := (Id (A := A) x y) : type_scope.
+Notation "x = y" := (Id x y) : type_scope.
+
+(** A few lemmas about Id *)
+Definition cong@{i j} {A : Type@{i}} {B : Type@{j}} (f : A → B) {x y : A}
+  (e : Id x y) : Id (f x) (f y) :=
+  match e with refl => refl end.
+(* Transitivity from the middle. *)
+Definition v_trans@{i} {A : Type@{i}} {x y z : A}
+  (e1 : Id y x) (e2 : Id y z) : Id x z :=
+  match e1 with refl => e2 end.
+
+(** * Notation for tests *)
+Notation convertible x y := (refl : x = y).

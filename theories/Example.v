@@ -32,8 +32,8 @@ with goodB (pb : preB) : preA → SProp :=
   end
 .
 
-Definition A := sub preA goodA.
-Definition B (a : A) := sub preB λ pb ↦ goodB pb a.(wit).
+Definition A := { pa | goodA pa }.
+Definition B (a : A) := { pb | goodB pb a.(wit) }.
 Definition eta (x : X) : A := sub_in (pre_eta x) I.
 Definition ext (a : A) (b : B a) : A :=
   sub_in (pre_ext a.(wit) b.(wit)) (conj a.(prf) b.(prf)).
