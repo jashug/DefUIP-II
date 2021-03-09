@@ -1,4 +1,4 @@
-* Definitional UIP Makes Constructing Inductive-Inductive Types Straightforward
+# Definitional UIP Makes Constructing Inductive-Inductive Types Straightforward
 
 Performing a Forsberg-style 2-layer construction of Inductive-Inductive types, with the second layer in SProp with UIP, everything works like a charm. For the eliminator, perform a similar 2-layer dance, and you get the general eliminator with definitional computation rules. Everything you want you get.
 
